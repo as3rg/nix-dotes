@@ -54,6 +54,10 @@ keys.globalkeys = gears.table.join(
     awful.key({}, "XF86AudioNext", function() awful.spawn("playerctl next", false) end),
     awful.key({}, "XF86AudioPrev", function() awful.spawn("playerctl previous", false) end),
 
+    awful.key({mod}, "p", function () awful.spawn("playerctl play-pause", false) end),
+    awful.key({mod}, "{", function() awful.spawn("playerctl previous", false) end),
+    awful.key({mod}, "}", function() awful.spawn("playerctl next", false) end),
+
     -- Switch layout
     awful.key({mod}, '\\', function() awful.layout.inc(1) end),
     awful.key({mod, "Shift"}, '\\', function() awful.layout.inc(-1) end),

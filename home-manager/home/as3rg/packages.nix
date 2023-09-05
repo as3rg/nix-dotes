@@ -35,7 +35,11 @@
     rsync
     telegram-desktop
     tesseract4
-    texlive.combined.scheme-small
+    # texlive.combine {
+    #   inherit (texlive)
+    #   latexmk 
+    # }
+    texlive.combined.scheme-full
     transmission-qt
     uget
     unzip
