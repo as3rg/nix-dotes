@@ -47,14 +47,14 @@
     isNormalUser = true;
     home = "/home/as3rg";
     initialPassword = "1234";
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [ "wheel" "networkmanager" "docker" ];
     packages = [pkgs.home-manager];
     shell = pkgs.fish;
   };
   home-manager.users.as3rg = import ../../home/as3rg;
 
   # System
-  system.autoUpgrade.enable = true;
+  system.autoUpgrade.enable = false;    # Kills Xserver
   services.xserver = {
     enable = true;
     libinput.enable = true;
@@ -91,6 +91,14 @@
     pulse.enable = true;
   };
   security.polkit.enable = true;
+
+  virtualisation.docker = {
+    enable = true;
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
+  };
 
   system.stateVersion = "23.05";
 }

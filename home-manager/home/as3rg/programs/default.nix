@@ -11,7 +11,7 @@
     ./kitty.nix
     ./fish.nix
     ./bash.nix
-    ./exa.nix
+    ./eza.nix
     ./git.nix
     ./htop.nix
     ./qutebrowser.nix

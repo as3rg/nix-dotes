@@ -4,7 +4,7 @@
   lib,
   ...
 }: {
-  programs.exa = {
+  programs.eza = {
     enable = true;
     icons = true;
     enableAliases = true;

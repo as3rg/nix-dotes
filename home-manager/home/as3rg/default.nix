@@ -21,6 +21,12 @@
     allowUnfreePredicate = _: true;
   };
 
+  nixpkgs.overlays = [ (self: super: {
+      mpv = super.mpv.override {
+        scripts = [ self.mpvScripts.mpris ];
+      };
+    }) ];
+
   # Fonts
   fonts.fontconfig.enable = true;
 
