@@ -47,7 +47,7 @@
     isNormalUser = true;
     home = "/home/as3rg";
     initialPassword = "1234";
-    extraGroups = [ "wheel" "networkmanager" "docker" ];
+    extraGroups = [ "wheel" "networkmanager" "docker" "scanner" "lp" "libvirtd" ];
     packages = [pkgs.home-manager];
     shell = pkgs.fish;
   };
@@ -92,14 +92,30 @@
   };
   security.polkit.enable = true;
 
-  virtualisation.docker = {
-    enable = true;
-    rootless = {
-      enable = true;
-      setSocketVariable = true;
-    };
-  };
+  # virtualisation.docker = {
+  #   enable = true;
+  #   rootless = {
+  #     enable = true;
+  #     setSocketVariable = true;
+  #   };
+  # };
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
 
-  system.stateVersion = "23.05";
+  services.printing.enable = true;
+  hardware.sane.enable = true;
+  services.printing.drivers = [ pkgs.samsung-unified-linux-driver ];
+  # hardware.printers = {
+  #   ensurePrinters = [
+  #     {
+  #       name = "Samsung_scx-4220";
+  #       location = "Home";
+  #       deviceUri = "usb://Samsung/SCX-4200%20Series?serial=9C66BFEQ410167T.&interface=1";
+  #       model = "./Samsung_SCX-4200_Series.ppd";
+  #     }
+  #   ];
+  # };
+
+  system.stateVersion = "23.11";
 }
 

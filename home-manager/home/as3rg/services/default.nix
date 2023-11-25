@@ -13,6 +13,7 @@
       inactiveOpacity = 1.0;
       menuOpacity = 1.0;
       backend = "glx";
+      package = pkgs.picom-next;
     };
     copyq.enable = true;
   };
