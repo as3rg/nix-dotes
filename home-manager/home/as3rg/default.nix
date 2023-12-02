@@ -11,7 +11,7 @@
   ];
   home = {
     homeDirectory = "/home/as3rg";
-    stateVersion = "23.05";
+    stateVersion = "24.05";
     username = "as3rg";
   };
 

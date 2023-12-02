@@ -13,6 +13,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "ntfs" ];
 
+  boot.extraModulePackages = with config.boot.kernelPackages; [ perf ];
   # Networking
   networking.hostName = "as3rg";
   networking.networkmanager.enable = true;
@@ -92,13 +93,13 @@
   };
   security.polkit.enable = true;
 
-  # virtualisation.docker = {
-  #   enable = true;
-  #   rootless = {
-  #     enable = true;
-  #     setSocketVariable = true;
-  #   };
-  # };
+  virtualisation.docker = {
+    enable = true;
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
+  };
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
 
@@ -116,6 +117,6 @@
   #   ];
   # };
 
-  system.stateVersion = "23.11";
+  system.stateVersion = "24.05";
 }
 
