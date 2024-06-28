@@ -9,7 +9,10 @@
     # jetbrains.clion
     # jetbrains.idea-ultimate
     (texlive.combine { inherit (texlive) scheme-small latexmk mathdots collection-fontsextra collection-langcyrillic; } ) 
+	libqalculate
+	ncdu
     bat
+	comma
     discord
     file
     flameshot
@@ -37,7 +40,6 @@
     vscode
     wget
     yt-dlp
-    zathura
     zip
   ];
 

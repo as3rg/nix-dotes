@@ -133,6 +133,8 @@ keys.globalkeys = gears.table.join(
     awful.key({mod}, "/", function() awful.spawn('rofi -show calc -modi calc -no-show-match -no-sort', false) end),
     awful.key({mod}, "l", function() awful.spawn("xsecurelock", false) end),
     awful.key({mod}, "r", function() awful.spawn("rofi -show drun -show-icons", false) end),
+    awful.key({mod, "Shift"}, "p", function() awful.spawn('kitty ipython', false) end),
+    awful.key({mod, "Shift"}, "/", function() awful.spawn('kitty qalc', false) end),
     awful.key({mod, "Shift"}, "r", function() awful.spawn("kitty ranger", false) end),
     awful.key({mod, "Shift"}, "t", function() awful.spawn("kitty htop", false) end),
     awful.key({mod, "Shift"}, "w", function() awful.spawn("kitty nmtui", false) end),
