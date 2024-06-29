@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
-capacity=$(cat /sys/class/power_supply/BAT0/capacity)
-status=$(cat /sys/class/power_supply/BAT0/status)
-printf "$capacity\t$status\n"
+BAT="/sys/class/power_supply/BAT0"
+if [ -d $BAT ]; then
+    capacity=$(cat $BAT/capacity)
+    status=$(cat $BAT/status)
+    printf "$capacity\t$status\n"
+else
+    printf "100\tNone\n"
+fi

@@ -9,3 +9,7 @@ install:
 
 update:
 	home-manager switch --flake ".#xiaomi"
+
+build:
+	nix build ".#nixosConfigurations.live.config.system.build.isoImage"
+	

@@ -5,7 +5,6 @@
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
-      # inputs.nix-colors.url = "github:misterio77/nix-colors";
     };
   };
 
@@ -26,7 +25,16 @@
         specialArgs = {inherit inputs outputs;};
         system = "x86_64-linux";
         modules = [
-          ./hosts/xiaomi
+          ./hosts/awesome.nix
+          ./hosts/xiaomi.nix
+        ];
+      };
+      "live" = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs outputs;};
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/live.nix
+          ./hosts/awesome.nix
         ];
       };
     };

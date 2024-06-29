@@ -9,7 +9,6 @@
     bluetuith
     bluez
     brightnessctl
-    htop
     networkmanager
     pamixer
     playerctl
@@ -17,5 +16,8 @@
     pulsemixer
     xclip
     xsecurelock
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
   ];
 }

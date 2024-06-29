@@ -1,13 +1,14 @@
 {
   config,
+  lib,
   pkgs,
   ...
-}: {
+}: 
+let
+  cfg = config.modules.gui;
+in {
   imports = [
-    ../general
     ./packages.nix
-    ./env-vars.nix
     ./programs
-    ./services
-  ]; 
+  ];
 }

@@ -186,6 +186,9 @@ local function notify_battery()
 end
 
 awesome.connect_signal("bat::value", function(cap, status)
+    if status:match("None") then
+        return
+    end
     local charging = (status == "Charging")
     if not charging and cap <= beautiful.battery_low_border then
         if not notify_bat then notify_battery() end

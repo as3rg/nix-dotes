@@ -71,6 +71,7 @@ local bat_icon = wibox.widget {
 M.bat = wibox.widget {bat_icon, widget = wibox.container.background}
 
 awesome.connect_signal("bat::value", function(cap, status)
+	M.bat.visible = not status:match("None")
     local charging = status:match("Charging")
     local icon
     if charging then
