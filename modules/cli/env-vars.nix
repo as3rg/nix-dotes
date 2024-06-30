@@ -13,5 +13,6 @@
     rr = "ranger";
     copy = "xclip -selection clipboard";
     icopy = "xclip -selection clipboard -t image/png";
+    nix-shell = "nix-shell --run $SHELL";
   };
 }

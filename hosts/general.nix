@@ -1,6 +1,18 @@
-{ config, pkgs, inputs, outputs, ... }:
+{ config, pkgs, lib, inputs, outputs, ... }:
 {
   imports = [ inputs.home-manager.nixosModules.home-manager ];
+
+  home-manager.users.as3rg = {
+    home = {
+      homeDirectory = "/home/as3rg";
+      stateVersion = "24.11";
+      username = "as3rg";
+    };
+    nixpkgs.config.allowUnfree = true;
+    imports = [
+    ../modules/cli
+    ];
+  };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
@@ -30,12 +42,11 @@
   # Users
   programs.zsh.enable = true;
 
-  # users.users.nixos = null;
-  users.users.root.initialHashedPassword = "1234";
+  users.users.root.hashedPassword = "$y$j9T$JVx/q.wFFnbpT19N1ZfX..$FcfuxUW89ckSU.CyPIbCafFjQir6vOzeeR9FHD3VF1/";
   users.users.as3rg = {
     isNormalUser = true;
     home = "/home/as3rg";
-    initialPassword = "1234";
+    hashedPassword = "$y$j9T$JVx/q.wFFnbpT19N1ZfX..$FcfuxUW89ckSU.CyPIbCafFjQir6vOzeeR9FHD3VF1/";
     extraGroups = [ "wheel" "networkmanager" "docker" "scanner" "lp" "libvirtd" ];
     packages = [pkgs.home-manager];
     shell = pkgs.zsh;

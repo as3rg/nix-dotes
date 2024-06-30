@@ -8,15 +8,26 @@
     enable = true;
     settings = {
       format = lib.concatStrings [
-        "$status$cmd_duration$line_break"
-        "$username$directory$shell"
+        "$status"
+        "$cmd_duration"
+        "$line_break"
+
+        "$username"
+        "$directory"
+        "$shell"
         "$git_branch"
         "$nix_shell"
         "$docker_context"
         "$time"
         "$line_break"
-        "[❱❱](fg:bright-yellow) "
+
+        "$custom$shlvl "
       ];
+      custom.ssh = {
+        format = "[❱](fg:red)";
+        when = "[ ! -z $SSH_CLIENT ]";
+        disabled = false;
+      };
       status = {
         success_symbol = "[0](fg:green)";
         format = "\\[[$int]($style)\\] ";
@@ -73,6 +84,15 @@
         time_format = "%T";
         style = "fg:green";
         format = "\\[[ $time]($style)\\] ";
+      };
+      shlvl = {
+        disabled = false;
+        format = "[$symbol]($style)";
+        symbol = "❱";
+        repeat = true;
+        repeat_offset = 0;
+        threshold = 0;
+        style = "fg:blue";
       };
     };
   };

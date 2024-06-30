@@ -31,7 +31,7 @@ in {
     menuOpacity = 1.0;
     backend = "glx";
     package = pkgs.picom-next;
-  };	
+  };
 
   # Copyq
   services.copyq.enable = true;
