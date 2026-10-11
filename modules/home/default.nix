@@ -12,8 +12,9 @@ in {
     # jetbrains.clion
     # jetbrains.idea-ultimate
     # jetbrains.pycharm-professional
+    # jetbrains.idea-community
     libreoffice
-    discord
+    # discord
     noti
     obs-studio
     telegram-desktop

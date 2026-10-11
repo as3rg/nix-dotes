@@ -1,11 +1,11 @@
 { config, pkgs, lib, inputs, outputs, ... }:
 {
-  imports = [ inputs.home-manager.nixosModules.home-manager ];
+  imports = [ inputs.home-manager.nixosModules.home-manager ./services/lowBatteryNotifier.nix ./services/highBatteryNotifier.nix ];
 
   home-manager.users.as3rg = {
     home = {
       homeDirectory = "/home/as3rg";
-      stateVersion = "24.11";
+      stateVersion = "26.05";
       username = "as3rg";
     };
     nixpkgs.config.allowUnfree = true;
@@ -13,12 +13,13 @@
     ../modules/cli
     ];
   };
+  home-manager.backupFileExtension = "bck";
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Networking
   networking.hostName = "as3rg";
-  networking.wireless.enable = false;
+  # networking.nameservers = [ "8.8.8.8" ]; 
   networking.networkmanager.enable = true;
   hardware.bluetooth.enable = true;
 
@@ -41,6 +42,7 @@
 
   # Users
   programs.zsh.enable = true;
+  programs.nix-ld.enable = true;
 
   users.users.root.hashedPassword = "$y$j9T$JVx/q.wFFnbpT19N1ZfX..$FcfuxUW89ckSU.CyPIbCafFjQir6vOzeeR9FHD3VF1/";
   users.users.as3rg = {
@@ -57,6 +59,6 @@
   security.polkit.enable = true;
 
   # Version
-  system.stateVersion = "24.11";
+  system.stateVersion = "26.05";
 }
 

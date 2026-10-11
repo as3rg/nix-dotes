@@ -4,10 +4,20 @@
   lib,
   ...
 }: {
-  programs.git = {
-    enable = true;
-    userName = "as3rg";
-    userEmail = "sergeev0xEF@gmail.com";
-    diff-so-fancy.enable = true;
+  programs = {
+    git = {
+      enable = true;
+      settings.user = {
+        name = "as3rg";
+        email = "sergeev0xEF@gmail.com";
+      };
+      settings = {
+         credential.helper = "store";
+      };
+    };
+    diff-so-fancy = {
+      enable = true;
+      enableGitIntegration = true;
+    };
   };
 }

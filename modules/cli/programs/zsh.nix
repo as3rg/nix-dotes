@@ -16,10 +16,10 @@
     };
     oh-my-zsh = {
       enable = true;
-      plugins = [ "git" ];
+      plugins = [ "git" "direnv" ];
       theme = "half-life";
     };
-    initExtra = "
+    initContent = "
 setopt appendhistory
 setopt hist_ignore_space
 setopt hist_ignore_all_dups

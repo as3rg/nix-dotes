@@ -39,27 +39,19 @@
       };
       cmd_duration = {
         min_time = 0;
-        format = "\\[[ $duration]($style)\\] ";
+        format = "\\[[⏲ $duration]($style)\\] ";
       };
       username = {
         show_always = true;
         style_user = "bold fg:bright-yellow";
         style_root = "bold fg:red";
-        format = "\\[[ $user]($style)\\] ";
+        format = "\\[[ $user]($style)\\] ";
         disabled = false;
       };
       directory = {
         format = "\\[[$path]($style)\\] ";
         truncation_length = 3;
         truncation_symbol = "…/";
-        substitutions = {
-          "Documents" = "󰈙 ";
-          "Downloads" = " ";
-          "Music" = " ";
-          "Pictures" = " ";
-          "DotFiles" = " ";
-          "Code" = " ";
-        };
       };
       shell = {
         format = "\\[[󰆍 $indicator]($style)\\] ";
@@ -83,7 +75,7 @@
         disabled = false;
         time_format = "%T";
         style = "fg:green";
-        format = "\\[[ $time]($style)\\] ";
+        format = "\\[[🕰 $time]($style)\\] ";
       };
       shlvl = {
         disabled = false;

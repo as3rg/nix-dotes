@@ -5,19 +5,24 @@
 }: {
   home.packages = with pkgs; [
     gnumake
-	  libqalculate
-	  ncdu
+    libqalculate
+    ncdu
     bat
-	  comma
+    comma
     file
     neovim
     python3
-    python311Packages.ipython
     rsync
     unzip
     wget
     zip
     nixos-generators
+    killall
+    atac
+    tcpdump
+    dig
+    trippy
+    ripgrep
   ];
 
   home.file.".config/nvim" = { source = ../../configs/nvim; recursive = true;};

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-BAT="/sys/class/power_supply/BAT0"
+BAT="/sys/class/power_supply/BAT1"
 if [ -d $BAT ]; then
     capacity=$(cat $BAT/capacity)
     status=$(cat $BAT/status)

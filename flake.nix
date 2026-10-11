@@ -19,43 +19,62 @@
     pkgs = nixpkgs.legacyPackages.${system};
   in {
     formatter.${system} = pkgs.alejandra;
-
+    
     nixosConfigurations = {
-      "xiaomi" = nixpkgs.lib.nixosSystem {
+      # "xiaomi" = nixpkgs.lib.nixosSystem {
+      #   specialArgs = {inherit inputs outputs;};
+      #   system = "x86_64-linux";
+      #   modules = [
+      #     ./hosts/awesome.nix
+      #     ./hosts/xiaomi.nix
+      #     ./hosts/home.nix
+      #   ];
+      # };
+      "lenovo" = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
         system = "x86_64-linux";
         modules = [
-          ./hosts/awesome.nix
-          ./hosts/xiaomi.nix
+          ./hosts/general.nix
+          ./hosts/sway.nix
+          ./hosts/lenovo.nix
           ./hosts/home.nix
         ];
       };
-      "live" = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        system = "x86_64-linux";
-        modules = [
-          ./hosts/awesome.nix
-          ./hosts/live.nix
-          ({ config, lib, pkgs, inputs, outputs, ... }: { home-manager.users.as3rg.services.picom.enable = lib.mkForce false; })
-        ];
-      };
-      "vm-gui" = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        system = "x86_64-linux";
-        modules = [
-          ./hosts/awesome.nix
-          ./hosts/vm.nix
-          ({ config, lib, pkgs, inputs, outputs, ... }: { home-manager.users.as3rg.services.picom.enable = lib.mkForce false; })
-        ];
-      };
-      "vm-cli" = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        system = "x86_64-linux";
-        modules = [
-          ./hosts/vm.nix
-          ./hosts/general.nix
-        ];
-      };
+      # "live" = nixpkgs.lib.nixosSystem {
+      #   specialArgs = {inherit inputs outputs;};
+      #   system = "x86_64-linux";
+      #   modules = [
+      #     ./hosts/awesome.nix
+      #     ./hosts/live.nix
+      #     ({ config, lib, pkgs, inputs, outputs, ... }: { home-manager.users.as3rg.services.picom.enable = lib.mkForce false; })
+      #   ];
+      # };
+      # "live-arm" = nixpkgs.lib.nixosSystem {
+      #   specialArgs = {inherit inputs outputs;};
+      #   system = "aarch64-linux";
+      #   modules = [
+      #     ./hosts/awesome.nix
+      #     ./hosts/live.nix
+      #     ({ config, lib, pkgs, inputs, outputs, ... }: { home-manager.users.as3rg.services.picom.enable = lib.mkForce false; })
+      #   ];
+      # };
+      # "vm-gui" = nixpkgs.lib.nixosSystem {
+      #   specialArgs = {inherit inputs outputs;};
+      #   system = "x86_64-linux";
+      #   modules = [
+      #     ./hosts/awesome.nix
+      #     ./hosts/vm.nix
+      #     ({ config, lib, pkgs, inputs, outputs, ... }: { home-manager.users.as3rg.services.picom.enable = lib.mkForce false; })
+      #   ];
+      # };
+      # "vm-cli" = nixpkgs.lib.nixosSystem {
+      #   specialArgs = {inherit inputs outputs;};
+      #   system = "x86_64-linux";
+      #   modules = [
+      #     ./hosts/vm.nix
+      #     ./hosts/general.nix
+      #   ];
+      # };
     };
   };
 }

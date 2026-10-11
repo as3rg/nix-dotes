@@ -5,7 +5,6 @@
   ...
 }: {
   imports = [    
-  ./firefox.nix
   ./vscode.nix
   ./kitty.nix
   ];

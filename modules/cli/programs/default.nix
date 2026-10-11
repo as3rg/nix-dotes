@@ -16,9 +16,10 @@
   ./lazygit.nix 
   ./ranger.nix 
   ./starship.nix
-  ./thefuck.nix
+  ./tealdeer.nix
   ./zoxide.nix 
   ./zsh.nix
+  ./direnv.nix
   ];
   programs.home-manager.enable = true;
 }
