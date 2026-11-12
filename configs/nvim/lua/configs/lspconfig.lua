@@ -72,7 +72,7 @@ M.defaults = function()
         end,
     })
 
-    local servers = { "clangd", "pyright", "rust_analyzer", "nil", "hls", "coq-lsp" }
+    local servers = { "clangd", "pyright", "rust_analyzer", "nil", "hls", "coq-lsp", "sourcekit" }
     vim.lsp.enable(servers)
 end
 

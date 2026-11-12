@@ -9,9 +9,15 @@
   # Boot
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ "i915" ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelModules = [ "kvm-intel" "vfio-pci" ];
   boot.kernelPackages = pkgs.linuxPackages_latest; 
-  boot.kernelParams = [ "i915.force_probe=7d55" "i915.enable_psr=0" ];
+  boot.kernelParams = [
+    "i915.force_probe=7d55"
+    "i915.enable_psr=0"
+    "default_hugepagesz=2M"
+    "hugepagesz=2M"
+    "hugepages=1024"
+  ];
   boot.blacklistedKernelModules = [ "intel_ipu6" ]; # should fix panics
 
   boot.loader.systemd-boot.enable = true;
