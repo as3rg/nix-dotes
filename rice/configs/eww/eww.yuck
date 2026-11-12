@@ -1,0 +1,230 @@
+;; ── state variables (updated by scripts / notifd) ───────────────────────────
+(defvar ws1 "empty")
+(defvar ws2 "empty")
+(defvar ws3 "empty")
+(defvar ws4 "empty")
+(defvar ws5 "empty")
+(defvar ws6 "empty")
+(defvar ws7 "empty")
+(defvar ws8 "empty")
+(defvar ws9 "empty")
+(defvar ws10 "empty")
+
+(defvar dnd "off")
+(defvar osd_label "Volume")
+(defvar osd_value 0)
+(defvar notif_app "")
+(defvar notif_summary "")
+(defvar notif_body "")
+(defvar notif_time "")
+
+;; ── data sources (cheap polling / event driven) ─────────────────────────────
+(deflisten cpu "~/.config/eww/scripts/cpu.sh")
+(defpoll workspaces :interval "1s" "~/.config/eww/scripts/workspaces.sh")
+(defpoll mem :interval "5s" "~/.config/eww/scripts/mem.sh")
+(defpoll disk :interval "60s" "~/.config/eww/scripts/disk.sh")
+(defpoll battery :interval "30s" "~/.config/eww/scripts/battery.sh")
+(defpoll batcls :interval "30s" "~/.config/eww/scripts/batcls.sh")
+(defpoll net :interval "3s" "~/.config/eww/scripts/netstate.sh")
+(defpoll bt :interval "3s" "~/.config/eww/scripts/btstate.sh")
+(defpoll wifi_on :interval "3s" "~/.config/eww/scripts/wifi_on.sh")
+(defpoll wifi_ssid :interval "3s" "~/.config/eww/scripts/wifi_ssid.sh")
+(defpoll bt_on :interval "3s" "~/.config/eww/scripts/bt_on.sh")
+(defpoll mic :interval "3s" "~/.config/eww/scripts/micstate.sh")
+(defpoll cam :interval "3s" "~/.config/eww/scripts/camstate.sh")
+(defpoll volume :interval "1s" :initial "0" "pamixer --get-volume")
+(defpoll volmute :interval "1s" "~/.config/eww/scripts/volmute.sh")
+(defpoll micmute :interval "1s" "~/.config/eww/scripts/micmute.sh")
+(defpoll bright :interval "1s" :initial "50" "brightnessctl -m | cut -d, -f4 | tr -d '%'")
+(defpoll time :interval "5s" "date '+%H:%M'")
+(defpoll date :interval "60s" "date '+%a %d %b'")
+(defpoll player_status :interval "2s" "playerctl status 2>/dev/null || echo Stopped")
+(defpoll player_title :interval "2s" "playerctl metadata title 2>/dev/null")
+(defpoll player_artist :interval "2s" "playerctl metadata artist 2>/dev/null")
+(defpoll notif_json :interval "2s" :initial "[]" "~/.config/eww/scripts/notif-list.sh")
+
+;; ── widgets ─────────────────────────────────────────────────────────────────
+(defwidget wsbtn [num state]
+  (button
+    :class "ws ${state}"
+    :onclick "swaymsg workspace number ${num}"
+    :onmiddleclick "swaymsg move container to workspace number ${num}"
+    "${num}"))
+
+(defwidget bar-root []
+  (centerbox :orientation "h" :class "bar"
+    (box :space-evenly false :orientation "h" :spacing 12
+      (box :space-evenly false :orientation "h" :spacing 1
+        (wsbtn :num 1 :state ws1)
+        (wsbtn :num 2 :state ws2)
+        (wsbtn :num 3 :state ws3)
+        (wsbtn :num 4 :state ws4)
+        (wsbtn :num 5 :state ws5)
+        (wsbtn :num 6 :state ws6)
+        (wsbtn :num 7 :state ws7)
+        (wsbtn :num 8 :state ws8)
+        (wsbtn :num 9 :state ws9)
+        (wsbtn :num 10 :state ws10))
+      (label :text workspaces)
+      (box :space-evenly false :orientation "h" :spacing 12
+        (label :class "module" :text "  ${cpu}%")
+        (label :class "module" :text "  ${mem}%")
+        (label :class "module" :text "  ${disk}")
+        (label :class "module bat ${batcls}" :text battery)))
+    (label :class "clock" :text time)
+    (box :space-evenly false :orientation "h" :spacing 12 :halign "end"
+      (button :class "bar-btn" :onclick "~/.config/eww/scripts/toggle-panel.sh" net)
+      (button :class "bar-btn" :onclick "~/.config/eww/scripts/toggle-panel.sh" bt)
+      (button :class "bar-btn dnd-${dnd}" :onclick "~/.config/eww/scripts/toggle-panel.sh" "")
+      (button :class "bar-btn warn" :onclick "~/.config/eww/scripts/mic-mute.sh" mic)
+      (label :class "warn" :text cam))))
+
+;; iOS-style switch (state: on|off)
+(defwidget pillswitch [state]
+  (box :class "switch ${state}" :valign "center"
+    (box :class "knob" :halign { state == "on" ? "end" : "start" })))
+
+;; quick-settings tile
+(defwidget tile [icon title status state cmd]
+  (button :class "tile ${state}" :onclick cmd
+    (box :space-evenly false :orientation "h" :spacing 10
+      (label :class "tile-icon" :text icon)
+      (box :space-evenly false :orientation "v" :spacing 1 :halign "start"
+        (label :class "tile-title" :text title :xalign 0)
+        (label :class "tile-status" :text status :xalign 0 :limit-width 16))
+      (label :hexpand true :text "")
+      (pillswitch :state state))))
+
+(defwidget panel-root []
+  (box :space-evenly false :orientation "v" :spacing 14 :class "panel"
+    (box :space-evenly false :orientation "h" :spacing 8
+      (label :class "panel-title" :text "Control Center" :xalign 0)
+      (label :hexpand true :text "")
+      (button :class "icon-btn" :onclick "eww close panel" "✕"))
+
+    (box :space-evenly true :orientation "h" :spacing 10
+      (tile :icon "" :title "Wi-Fi"
+        :status { wifi_on == "on" ? wifi_ssid : "off" }
+        :state wifi_on
+        :cmd "~/.config/eww/scripts/wifi-toggle.sh")
+      (tile :icon "" :title "Bluetooth"
+        :status { bt_on == "on" ? "on" : "off" }
+        :state bt_on
+        :cmd "~/.config/eww/scripts/bt-toggle.sh"))
+
+    (box :space-evenly true :orientation "h" :spacing 10
+      (tile :icon "" :title "Focus"
+        :status { dnd == "on" ? "muted" : "allowed" }
+        :state dnd
+        :cmd "~/.config/eww/scripts/toggle-dnd.sh")
+      (tile :icon "" :title "Microphone"
+        :status micmute
+        :state { micmute == "muted" ? "off" : "on" }
+        :cmd "~/.config/eww/scripts/mic-mute.sh"))
+
+    (box :class "card ${volmute}" :space-evenly false :orientation "v" :spacing 8
+      (box :space-evenly false :orientation "h" :spacing 8
+        (label :class "card-icon" :text "")
+        (label :class "card-title" :text "Volume" :xalign 0)
+        (label :hexpand true :text "")
+        (label :class "card-value" :text "${volume}%")
+        (button :class "mini ${volmute}" :onclick "~/.config/eww/scripts/vol-mute.sh"
+          (label :text { volmute == "muted" ? "unmute" : "mute" })))
+      (scale :class "slider" :value volume :min 0 :max 100 :onchange "pamixer --set-volume {}"))
+
+    (box :class "card" :space-evenly false :orientation "v" :spacing 8
+      (box :space-evenly false :orientation "h" :spacing 8
+        (label :class "card-icon" :text "")
+        (label :class "card-title" :text "Display" :xalign 0)
+        (label :hexpand true :text "")
+        (label :class "card-value" :text "${bright}%"))
+      (scale :class "slider" :value bright :min 0 :max 100 :onchange "brightnessctl set {}%"))
+
+    (box :class "card notif-card-list" :vexpand true :space-evenly false :orientation "v" :spacing 8
+      (box :space-evenly false :orientation "h" :spacing 8
+        (label :class "card-icon" :text "")
+        (label :class "card-title" :text "Notifications" :xalign 0)
+        (label :hexpand true :text "")
+        (button :class "mini" :onclick "~/.config/eww/scripts/notif-clear.sh" "clear"))
+      (scroll :vexpand true :hscroll false :vscroll true :class "notif-scroll"
+        (box :space-evenly false :orientation "v" :spacing 8
+          (label :class "empty" :text "No notifications" :visible { notif_json == "[]" })
+          (for n in notif_json
+            (box :class "notif-item" :space-evenly false :orientation "v" :spacing 3
+              (box :space-evenly false :orientation "h"
+                (label :class "notif-app" :text { n.app } :xalign 0)
+                (label :hexpand true :text "")
+                (label :class "notif-time" :text { n.time }))
+              (label :class "notif-summary" :text { n.summary } :xalign 0)
+              (label :class "notif-body" :text { n.body } :wrap true :xalign 0))))))))
+
+(defwidget notif-root []
+  (box :space-evenly false :orientation "v" :spacing 6 :class "notif"
+    (box :space-evenly false :orientation "h" :spacing 8
+      (label :class "notif-app" :text notif_app :xalign 0)
+      (label :hexpand true :text "")
+      (label :class "notif-time" :text notif_time)
+      (button :class "icon-btn" :onclick "~/.config/eww/scripts/notif-close.sh" "✕"))
+    (label :class "notif-summary" :text notif_summary :xalign 0)
+    (label :class "notif-body" :text notif_body :wrap true :xalign 0)))
+
+(defwidget osd-root []
+  (box :space-evenly false :orientation "v" :spacing 6 :valign "center" :class "osd"
+    (label :class "osd-label" :text osd_label)
+    (progress :class "osd-bar" :value osd_value)))
+
+(defwidget desktop-root []
+  (box :space-evenly false :orientation "v" :spacing 10 :class "desktop"
+    (label :class "desk-time" :text time)
+    (label :class "desk-date" :text date)
+    (box :space-evenly false :orientation "v" :spacing 2
+      (label :class "desk-stat" :text "  ${cpu}%")
+      (label :class "desk-stat" :text "  ${mem}%")
+      (label :class "desk-stat" :text "  ${disk}")
+      (label :class "desk-stat bat ${batcls}" :text battery))
+    (label :class "desk-divider" :text "─────────────")
+    (label :class "desk-title" :text player_title)
+    (label :class "desk-artist" :text player_artist)
+    (box :orientation "h" :space-evenly true
+      (button :class "media-btn" :onclick "playerctl previous" "")
+      (button :class "media-btn" :onclick "playerctl play-pause" "")
+      (button :class "media-btn" :onclick "playerctl next" ""))))
+
+;; ── windows ─────────────────────────────────────────────────────────────────
+(defwindow bar
+  :monitor "eDP-1"
+  :geometry (geometry :x "0%" :y "6px" :width "97%" :height "38px" :anchor "top center")
+  :stacking "fg"
+  :exclusive true
+  :focusable "none"
+  :namespace "eww-bar"
+  (bar-root))
+
+(defwindow panel
+  :monitor "eDP-1"
+  :geometry (geometry :x "0px" :y "0px" :width "400px" :height "100%" :anchor "right center")
+  :stacking "overlay"
+  :exclusive true
+  :namespace "eww-panel"
+  (panel-root))
+
+(defwindow notif
+  :monitor "eDP-1"
+  :geometry (geometry :x "-12px" :y "54px" :width "380px" :height "170px" :anchor "top right")
+  :stacking "overlay"
+  :namespace "eww-notif"
+  (notif-root))
+
+(defwindow osd
+  :monitor "eDP-1"
+  :geometry (geometry :x "0%" :y "48px" :width "320px" :height "90px" :anchor "bottom center")
+  :stacking "overlay"
+  :namespace "eww-osd"
+  (osd-root))
+
+(defwindow desktop
+  :monitor "eDP-1"
+  :geometry (geometry :x "-12px" :y "12px" :width "340px" :height "430px" :anchor "bottom right")
+  :stacking "bottom"
+  :namespace "eww-desktop"
+  (desktop-root))
